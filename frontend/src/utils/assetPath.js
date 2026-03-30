@@ -11,6 +11,15 @@ const getGithubPagesBase = () => {
   return firstSegment ? `/${firstSegment}` : '';
 };
 
+const getPublicBase = () => {
+  const rawPublicUrl = process.env.PUBLIC_URL;
+  if (rawPublicUrl && rawPublicUrl !== '.' && rawPublicUrl !== './') {
+    return rawPublicUrl.replace(/\/$/, '');
+  }
+
+  return getGithubPagesBase();
+};
+
 export const toAssetUrl = (assetPath) => {
   if (!assetPath || typeof assetPath !== 'string') {
     return assetPath;
@@ -21,6 +30,6 @@ export const toAssetUrl = (assetPath) => {
   }
 
   const normalizedPath = assetPath.startsWith('/') ? assetPath : `/${assetPath}`;
-  const basePath = process.env.PUBLIC_URL || getGithubPagesBase();
+  const basePath = getPublicBase();
   return `${basePath}${normalizedPath}`;
 };
