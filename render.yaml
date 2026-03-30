@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATABASE_URL
+        fromDatabase:
+          name: portfolio-postgres
+          property: connectionString
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+      - key: TELEGRAM_TIMEOUT_MS
+        value: 8000
+      - key: CORS_ORIGINS
+        value: https://extansaria.github.io
+
+databases:
+  - name: portfolio-postgres
+    plan: free

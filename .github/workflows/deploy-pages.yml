@@ -35,6 +35,8 @@ jobs:
       - name: Build frontend
         run: CI=false npm run build
         working-directory: frontend
+        env:
+          REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
 
       - name: SPA fallback for GitHub Pages
         run: cp frontend/build/index.html frontend/build/404.html

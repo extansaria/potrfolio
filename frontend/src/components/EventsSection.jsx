@@ -2,20 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Users, Send, Loader2, CheckCircle, AlertCircle, User, Mail, Phone } from 'lucide-react';
 import { upcomingEvents, eventStatuses } from '../data/events';
 import { toAssetUrl } from '../utils/assetPath';
-
-// Определяем URL backend в зависимости от окружения
-// В production (Docker) nginx проксирует запросы, поэтому используем относительный путь
-// В development используем полный URL
-const getBackendUrl = () => {
-  if (process.env.NODE_ENV === 'production') {
-    // В production nginx проксирует /api/ к backend
-    return '';
-  }
-  // В development используем localhost
-  return process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
-};
-
-const BACKEND_URL = getBackendUrl();
+import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
 const REQUEST_TIMEOUT_MS = 12000;
 
 const EventsSection = () => {
@@ -34,7 +21,11 @@ const EventsSection = () => {
   useEffect(() => {
     const fetchEventStats = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/event-stats`);
+        if (isExternalBackendRequired) {
+          return;
+        }
+
+        const response = await fetch(buildApiUrl('/api/event-stats'));
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.events) {
@@ -75,6 +66,12 @@ const EventsSection = () => {
     let timeoutId;
 
     try {
+      if (isExternalBackendRequired) {
+        throw new Error(
+          'Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL с адресом API.'
+        );
+      }
+
       // Валидация
       if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
         throw new Error('Пожалуйста, заполните все обязательные поля');
@@ -92,7 +89,7 @@ const EventsSection = () => {
       const controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      const response = await fetch(`${BACKEND_URL}/api/event-register`, {
+      const response = await fetch(buildApiUrl('/api/event-register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,8 +3,7 @@ import {
   Lock, LogOut, Calendar, Users, CheckCircle, XCircle, 
   Search, RefreshCw, BarChart3, UserCheck, UserX, Trash2, Home
 } from 'lucide-react';
-
-const BACKEND_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
+import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
 
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,8 +29,13 @@ const AdminPanel = () => {
   // Загрузка событий
   const loadEvents = async () => {
     try {
+      if (isExternalBackendRequired) {
+        setError('Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL.');
+        return;
+      }
+
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/events`, {
+      const response = await fetch(buildApiUrl('/api/admin/events'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -55,7 +59,7 @@ const AdminPanel = () => {
   const loadRegistrations = async (eventId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/registrations/${eventId}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/registrations/${eventId}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -76,7 +80,7 @@ const AdminPanel = () => {
   const loadStats = async (eventId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/stats/${eventId}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/stats/${eventId}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -98,7 +102,11 @@ const AdminPanel = () => {
     setError('');
 
     try {
-      const response = await fetch(`${BACKEND_URL}/api/admin/login`, {
+      if (isExternalBackendRequired) {
+        throw new Error('Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL.');
+      }
+
+      const response = await fetch(buildApiUrl('/api/admin/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -149,7 +157,7 @@ const AdminPanel = () => {
   const handleCheckIn = async (registrationId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/check-in/${registrationId}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/check-in/${registrationId}`), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -171,7 +179,7 @@ const AdminPanel = () => {
   const handleCheckOut = async (registrationId) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/check-out/${registrationId}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/check-out/${registrationId}`), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -197,7 +205,7 @@ const AdminPanel = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${BACKEND_URL}/api/admin/registrations/${registrationId}`, {
+      const response = await fetch(buildApiUrl(`/api/admin/registrations/${registrationId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

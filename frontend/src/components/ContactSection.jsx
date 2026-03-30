@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2, CheckCircle, AlertCircle, Mail, MessageSquare, User } from 'lucide-react';
 import { personalInfo } from '../data/mock';
-
-// Определяем URL backend в зависимости от окружения
-// В production (Docker) nginx проксирует запросы, поэтому используем относительный путь
-// В development используем полный URL
-const getBackendUrl = () => {
-  if (process.env.NODE_ENV === 'production') {
-    // В production nginx проксирует /api/ к backend
-    return '';
-  }
-  // В development используем localhost
-  return process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
-};
-
-const BACKEND_URL = getBackendUrl();
+import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
 const REQUEST_TIMEOUT_MS = 12000;
 
 const ContactSection = () => {
@@ -40,6 +27,12 @@ const ContactSection = () => {
     // Пока используем mock для демонстрации
     // Будет заменено на реальный API
     try {
+      if (isExternalBackendRequired) {
+        throw new Error(
+          'Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL с адресом API.'
+        );
+      }
+
       // Валидация
       if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
         throw new Error('Пожалуйста, заполните все поля');
@@ -53,7 +46,7 @@ const ContactSection = () => {
       const controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      const response = await fetch(`${BACKEND_URL}/api/contact`, {
+      const response = await fetch(buildApiUrl('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +59,7 @@ const ContactSection = () => {
       if (!contentType || !contentType.includes('application/json')) {
         const text = await response.text();
         console.error('Backend вернул не JSON:', text.substring(0, 200));
-        throw new Error('Сервер недоступен. Убедитесь, что backend запущен на порту 3001');
+        throw new Error('Сервер недоступен. Проверьте доступность backend API.');
       }
 
       const data = await response.json();

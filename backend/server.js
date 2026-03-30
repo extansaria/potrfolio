@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -24,7 +26,29 @@ pool.on('error', (err) => {
 });
 
 // Middleware
-app.use(cors());
+const allowedOrigins = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser requests and local tools (no Origin header).
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error('CORS policy: origin is not allowed'));
+    }
+  })
+);
 app.use(express.json());
 
 // Telegram Bot API URL
@@ -41,6 +65,13 @@ const sendTelegramMessage = async (text) => {
     text,
     parse_mode: 'HTML'
   });
+};
+
+const initializeDatabase = async () => {
+  const initSqlPath = path.join(__dirname, 'init.sql');
+  const sql = fs.readFileSync(initSqlPath, 'utf-8');
+  await pool.query(sql);
+  console.log('✅ База данных инициализирована');
 };
 
 // Проверка наличия токенов
@@ -496,9 +527,21 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend сервер запущен на порту ${PORT}`);
-  console.log(`📡 Telegram бот: ${process.env.TELEGRAM_BOT_TOKEN ? '✅ Настроен' : '❌ Не настроен'}`);
-  console.log(`💬 Chat ID: ${process.env.TELEGRAM_CHAT_ID ? '✅ Настроен' : '❌ Не настроен'}`);
-  console.log(`🗄️  База данных: PostgreSQL`);
-});
+const startServer = async () => {
+  try {
+    await initializeDatabase();
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Backend сервер запущен на порту ${PORT}`);
+      console.log(`📡 Telegram бот: ${process.env.TELEGRAM_BOT_TOKEN ? '✅ Настроен' : '❌ Не настроен'}`);
+      console.log(`💬 Chat ID: ${process.env.TELEGRAM_CHAT_ID ? '✅ Настроен' : '❌ Не настроен'}`);
+      console.log(`🗄️  База данных: PostgreSQL`);
+      console.log(`🌐 CORS origins: ${allowedOrigins.length ? allowedOrigins.join(', ') : 'all'}`);
+    });
+  } catch (error) {
+    console.error('❌ Не удалось инициализировать backend:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
