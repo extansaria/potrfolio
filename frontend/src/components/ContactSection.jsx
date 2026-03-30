@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2, CheckCircle, AlertCircle, Mail, MessageSquare, User } from 'lucide-react';
 import { personalInfo } from '../data/mock';
-import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
+import { API_MODE, callPublicApi, isExternalBackendRequired } from '../utils/backendUrl';
 const REQUEST_TIMEOUT_MS = 12000;
 
 const ContactSection = () => {
@@ -29,7 +29,7 @@ const ContactSection = () => {
     try {
       if (isExternalBackendRequired) {
         throw new Error(
-          'Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL с адресом API.'
+          'API для GitHub Pages не настроен. Укажите REACT_APP_GOOGLE_API_URL.'
         );
       }
 
@@ -46,12 +46,9 @@ const ContactSection = () => {
       const controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      const response = await fetch(buildApiUrl('/api/contact'), {
+      const response = await callPublicApi('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: formData,
         signal: controller.signal
       });
       // Проверяем Content-Type перед парсингом JSON
@@ -59,7 +56,11 @@ const ContactSection = () => {
       if (!contentType || !contentType.includes('application/json')) {
         const text = await response.text();
         console.error('Backend вернул не JSON:', text.substring(0, 200));
-        throw new Error('Сервер недоступен. Проверьте доступность backend API.');
+        throw new Error(
+          API_MODE === 'google'
+            ? 'Google API недоступен. Проверьте ссылку REACT_APP_GOOGLE_API_URL.'
+            : 'Сервер недоступен. Проверьте доступность backend API.'
+        );
       }
 
       const data = await response.json();

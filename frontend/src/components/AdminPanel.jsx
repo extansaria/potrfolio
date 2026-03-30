@@ -3,7 +3,7 @@ import {
   Lock, LogOut, Calendar, Users, CheckCircle, XCircle, 
   Search, RefreshCw, BarChart3, UserCheck, UserX, Trash2, Home
 } from 'lucide-react';
-import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
+import { API_MODE, buildApiUrl, isAdminApiAvailable } from '../utils/backendUrl';
 
 const AdminPanel = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +17,8 @@ const AdminPanel = () => {
   const [stats, setStats] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const isAdminUnavailable = !isAdminApiAvailable;
+
   // Проверка авторизации при загрузке
   useEffect(() => {
     const savedToken = localStorage.getItem('adminToken');
@@ -29,8 +31,12 @@ const AdminPanel = () => {
   // Загрузка событий
   const loadEvents = async () => {
     try {
-      if (isExternalBackendRequired) {
-        setError('Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL.');
+      if (isAdminUnavailable) {
+        setError(
+          API_MODE === 'google'
+            ? 'Админка недоступна в бесплатном Google API режиме.'
+            : 'API для GitHub Pages не настроен. Укажите REACT_APP_GOOGLE_API_URL.'
+        );
         return;
       }
 
@@ -102,8 +108,12 @@ const AdminPanel = () => {
     setError('');
 
     try {
-      if (isExternalBackendRequired) {
-        throw new Error('Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL.');
+      if (isAdminUnavailable) {
+        throw new Error(
+          API_MODE === 'google'
+            ? 'Админка недоступна в бесплатном Google API режиме.'
+            : 'API для GitHub Pages не настроен. Укажите REACT_APP_GOOGLE_API_URL.'
+        );
       }
 
       const response = await fetch(buildApiUrl('/api/admin/login'), {
@@ -238,6 +248,27 @@ const AdminPanel = () => {
   });
 
   // Форма авторизации
+  if (isAdminUnavailable) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">
+        <div className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-8 text-center">
+          <h2 className="text-2xl font-bold text-white mb-4">Админ-панель недоступна</h2>
+          <p className="text-gray-400 mb-6">
+            В бесплатном режиме на GitHub Pages работает только отправка форм через Google Apps Script.
+            Админ-панель доступна локально с Node backend.
+          </p>
+          <button
+            onClick={goToPortfolio}
+            className="inline-flex items-center gap-2 px-5 py-3 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded-xl hover:bg-cyan-500/30 transition-all"
+          >
+            <Home size={18} />
+            Вернуться на сайт
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4">

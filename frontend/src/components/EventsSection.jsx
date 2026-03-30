@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Users, Send, Loader2, CheckCircle, AlertCircle, User, Mail, Phone } from 'lucide-react';
 import { upcomingEvents, eventStatuses } from '../data/events';
 import { toAssetUrl } from '../utils/assetPath';
-import { buildApiUrl, isExternalBackendRequired } from '../utils/backendUrl';
+import { API_MODE, callPublicApi, isExternalBackendRequired } from '../utils/backendUrl';
 const REQUEST_TIMEOUT_MS = 12000;
 
 const EventsSection = () => {
@@ -25,7 +25,7 @@ const EventsSection = () => {
           return;
         }
 
-        const response = await fetch(buildApiUrl('/api/event-stats'));
+        const response = await callPublicApi('/api/event-stats');
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.events) {
@@ -68,7 +68,7 @@ const EventsSection = () => {
     try {
       if (isExternalBackendRequired) {
         throw new Error(
-          'Backend для GitHub Pages не настроен. Укажите REACT_APP_BACKEND_URL с адресом API.'
+          'API для GitHub Pages не настроен. Укажите REACT_APP_GOOGLE_API_URL.'
         );
       }
 
@@ -89,19 +89,16 @@ const EventsSection = () => {
       const controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-      const response = await fetch(buildApiUrl('/api/event-register'), {
+      const response = await callPublicApi('/api/event-register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           ...formData,
           eventId: selectedEvent.id,
           eventTitle: selectedEvent.title,
           eventDate: selectedEvent.date,
           eventTime: selectedEvent.time,
           eventLocation: selectedEvent.location
-        }),
+        },
         signal: controller.signal
       });
 
@@ -110,7 +107,11 @@ const EventsSection = () => {
       if (!contentType || !contentType.includes('application/json')) {
         const text = await response.text();
         console.error('Backend вернул не JSON:', text.substring(0, 200));
-        throw new Error('Сервер недоступен. Убедитесь, что backend запущен.');
+        throw new Error(
+          API_MODE === 'google'
+            ? 'Google API недоступен. Проверьте ссылку REACT_APP_GOOGLE_API_URL.'
+            : 'Сервер недоступен. Убедитесь, что backend запущен.'
+        );
       }
 
       const data = await response.json();
