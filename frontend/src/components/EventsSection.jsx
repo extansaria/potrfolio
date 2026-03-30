@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Users, Send, Loader2, CheckCircle, AlertCircle, User, Mail, Phone } from 'lucide-react';
 import { upcomingEvents, eventStatuses } from '../data/events';
+import { toAssetUrl } from '../utils/assetPath';
 
 // Определяем URL backend в зависимости от окружения
 // В production (Docker) nginx проксирует запросы, поэтому используем относительный путь
@@ -191,7 +192,7 @@ const EventsSection = () => {
                   <div className="md:w-2/5 relative">
                     <div className="relative h-64 md:h-full overflow-hidden rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none">
                       <img 
-                        src={event.image} 
+                        src={toAssetUrl(event.image)} 
                         alt={event.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />

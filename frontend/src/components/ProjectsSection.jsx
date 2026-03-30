@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { projectCases } from '../pages/projects/projectCases';
+import { toAssetUrl } from '../utils/assetPath';
 
 const ProjectCard = ({ project }) => (
   <Link
@@ -11,7 +12,7 @@ const ProjectCard = ({ project }) => (
       {project.coverImage ? (
         <div className="h-72 w-full rounded-xl overflow-hidden mb-5">
           <img
-            src={project.coverImage}
+            src={toAssetUrl(project.coverImage)}
             alt={`${project.title} - превью`}
             className={`h-full w-full ${
               project.coverFit === 'contain' ? 'object-contain bg-[#060a13]' : 'object-cover'

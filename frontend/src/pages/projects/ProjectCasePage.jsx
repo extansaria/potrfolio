@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Calendar, Layers, User } from 'lucide-react';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import { getProjectCaseBySlug, projectCases } from './projectCases';
+import { toAssetUrl } from '../../utils/assetPath';
 
 const ProjectCasePage = () => {
   const { slug } = useParams();
@@ -155,11 +156,11 @@ const ProjectCasePage = () => {
                   (imageItem.startsWith('http') || imageItem.startsWith('/')) ? (
                     <img
                       key={`${project.slug}-${index}`}
-                      src={imageItem}
+                      src={toAssetUrl(imageItem)}
                       alt={`${project.title} - экран ${index + 1}`}
                       className="w-full h-auto rounded-2xl cursor-zoom-in"
                       loading="lazy"
-                      onClick={() => setSelectedImage(imageItem)}
+                      onClick={() => setSelectedImage(toAssetUrl(imageItem))}
                     />
                   ) : (
                     <div
@@ -206,7 +207,7 @@ const ProjectCasePage = () => {
           onClick={() => setSelectedImage(null)}
         >
           <img
-            src={selectedImage}
+            src={toAssetUrl(selectedImage)}
             alt="Увеличенное изображение кейса"
             className="max-w-full max-h-full rounded-2xl cursor-zoom-out"
             onClick={(e) => e.stopPropagation()}

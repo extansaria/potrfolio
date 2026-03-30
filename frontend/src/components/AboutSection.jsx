@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Mail, Phone, Calendar } from 'lucide-react';
 import { personalInfo, education } from '../data/mock';
+import { toAssetUrl } from '../utils/assetPath';
 
 const AboutSection = () => {
   return (
@@ -18,7 +19,7 @@ const AboutSection = () => {
             {/* Аватар и краткая инфа */}
             <div className="flex items-start gap-6">
               <img 
-                src="/images/portrait.jpg" 
+                src={toAssetUrl('/images/portrait.jpg')} 
                 alt={personalInfo.name}
                 className="w-24 h-24 rounded-2xl object-cover border-2 border-cyan-500/30 shrink-0 shadow-lg shadow-cyan-500/20"
               />
