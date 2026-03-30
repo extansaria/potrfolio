@@ -41,15 +41,14 @@ export const BACKEND_URL = getBackendUrl();
 export const isExternalBackendRequired = API_MODE === 'backend' && BACKEND_URL === null;
 export const isAdminApiAvailable = API_MODE === 'backend' && !isExternalBackendRequired;
 
-export const callPublicApi = (path, options = {}) => {
+export const callPublicApi = async (path, options = {}) => {
   const { method = 'GET', body, signal } = options;
 
   if (API_MODE === 'google') {
-    return fetch(GOOGLE_API_URL, {
+    await fetch(GOOGLE_API_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       signal,
       body: JSON.stringify({
         action: path,
@@ -57,6 +56,20 @@ export const callPublicApi = (path, options = {}) => {
         payload: body || null
       })
     });
+
+    const googlePayload =
+      path === '/api/event-stats'
+        ? { success: true, events: [] }
+        : { success: true, message: 'Запрос отправлен' };
+
+    return {
+      ok: true,
+      status: 200,
+      headers: {
+        get: () => 'application/json'
+      },
+      json: async () => googlePayload
+    };
   }
 
   if (isExternalBackendRequired) {
