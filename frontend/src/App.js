@@ -15,6 +15,14 @@ import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
 import ProjectCasePage from "./pages/projects/ProjectCasePage";
 
+const getRouterBasename = () => {
+  if (window.location.hostname.includes("github.io")) {
+    const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
+    return firstSegment ? `/${firstSegment}` : "/";
+  }
+  return "/";
+};
+
 const ScrollManager = () => {
   const { pathname, hash } = useLocation();
 
@@ -64,7 +72,7 @@ const PortfolioPage = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
+      <BrowserRouter basename={getRouterBasename()}>
         <ScrollManager />
         <Routes>
           <Route path="/" element={<PortfolioPage />} />
