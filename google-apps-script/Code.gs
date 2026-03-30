@@ -113,7 +113,7 @@ function getEventStatsForId(eventId) {
 }
 
 function getOrCreateSheet(name, headers) {
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const spreadsheet = getSpreadsheet();
   let sheet = spreadsheet.getSheetByName(name);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(name);
@@ -124,6 +124,25 @@ function getOrCreateSheet(name, headers) {
   }
 
   return sheet;
+}
+
+function getSpreadsheet() {
+  const props = PropertiesService.getScriptProperties();
+  const storedId = props.getProperty("SPREADSHEET_ID");
+
+  if (storedId) {
+    return SpreadsheetApp.openById(storedId);
+  }
+
+  const active = SpreadsheetApp.getActiveSpreadsheet();
+  if (active) {
+    props.setProperty("SPREADSHEET_ID", active.getId());
+    return active;
+  }
+
+  const created = SpreadsheetApp.create("Portfolio Forms Data");
+  props.setProperty("SPREADSHEET_ID", created.getId());
+  return created;
 }
 
 function jsonResponse(data) {

@@ -10,6 +10,7 @@
 6. Execute as: `Me`.
 7. Who has access: `Anyone`.
 8. Deploy and copy the Web App URL (ends with `/exec`).
+9. If script is standalone (not bound to a sheet), it will auto-create a spreadsheet named `Portfolio Forms Data` on first request.
 
 ## 2) Configure frontend build on GitHub
 
