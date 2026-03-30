@@ -11,12 +11,12 @@ export const projectCases = [
     period: '2025',
     showSiteButton: true,
     missingHost: true,
-    coverImage: '/case1/1.png',
+    coverImage: '/case1/ember.png',
     images: [
-      '/case1/Main.jpg',
-      '/case1/Katalog.jpg',
-      '/case1/tavar.jpg',
-      '/case1/tavar1.jpg'
+      '/case1/summit.jpg',
+      '/case1/atlas.jpg',
+      '/case1/forge.jpg',
+      '/case1/prism.jpg'
     ]
   },
   {
@@ -32,7 +32,7 @@ export const projectCases = [
     liveUrl: 'https://extansaria.github.io/prioritet-landing/',
     coverImage:
       'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80',
-    images: ['/case2/11.jpg', '/case2/22.jpg', '/case2/33.jpg', '/case2/44.jpg']
+    images: ['/case2/cargo.jpg', '/case2/route.jpg', '/case2/fleet.jpg', '/case2/transit.jpg']
   },
   {
     id: 3,
@@ -46,15 +46,15 @@ export const projectCases = [
     stack: ['Tilda', 'Figma', 'JavaScript'],
     period: '2025',
     liveUrl: 'https://svecheri.ru/',
-    coverImage: '/case3/111.jpg',
+    coverImage: '/case3/candle.jpg',
     coverZoom: true,
     images: [
-      '/case3/111.jpg',
-      '/case3/222.jpg',
-      '/case3/333.jpg',
-      '/case3/444.jpg',
-      '/case3/555.jpg',
-      '/case3/666.jpg'
+      '/case3/candle.jpg',
+      '/case3/cedar.jpg',
+      '/case3/hearth.jpg',
+      '/case3/aroma.jpg',
+      '/case3/glow.jpg',
+      '/case3/craft.jpg'
     ]
   },
   {

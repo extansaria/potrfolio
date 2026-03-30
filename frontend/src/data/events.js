@@ -12,7 +12,7 @@ export const upcomingEvents = [
     duration: "2 часа",
     location: "Точка кипения ПРОМТЕХДИЗАЙН",
     address: "Санкт-Петербург, ул. Большая Морская, 18",
-    image: "/images/5.jpg",
+    image: "/images/syntax.jpg",
     topics: [
       "React и современные хуки",
       "State management: Redux vs Context",

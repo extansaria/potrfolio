@@ -18,7 +18,7 @@ const AboutSection = () => {
             {/* Аватар и краткая инфа */}
             <div className="flex items-start gap-6">
               <img 
-                src="/images/photo_2025-11-29_20-29-06.jpg" 
+                src="/images/portrait.jpg" 
                 alt={personalInfo.name}
                 className="w-24 h-24 rounded-2xl object-cover border-2 border-cyan-500/30 shrink-0 shadow-lg shadow-cyan-500/20"
               />

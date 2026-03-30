@@ -36,7 +36,7 @@ export const experience = [
       "Внедрил централизованную систему мониторинга и снизил время реагирования на инциденты в 3 раза",
       "Организовал защищённый доступ для удалённых подразделений и подготовил регламенты ИБ"
     ],
-    image: "/images/e49e20e0-6c4b-53dd-a072-d7f8b229320b.jpg"
+    image: "/images/profile.jpg"
   },
   {
     id: 1,
@@ -93,7 +93,7 @@ export const projects = [
     title: "3D Визуализация и Рендеринг",
     description: "Профессиональная 3D визуализация с детальной проработкой материалов, освещения и композиции. Реалистичный рендеринг с использованием современных техник постобработки и оптимизации для достижения фотореалистичного результата.",
     technologies: ["3D Modeling", "Rendering", "Post-Processing", "Material Design"],
-    image: "/images/photo_2025-12-01_09-45-23.jpg",
+    image: "/images/matrix.jpg",
     github: "https://github.com/daniilsergeev/3d-visualization",
     demo: "#"
   },
@@ -102,7 +102,7 @@ export const projects = [
     title: "E-Commerce Platform",
     description: "Полнофункциональный интернет-магазин с динамической корзиной покупок, системой управления товарами и безопасной обработкой платежей. Реализован с фокусом на удобство пользователя и оптимизацию конверсии.",
     technologies: ["React", "Redux", "Node.js", "MongoDB", "Payment API"],
-    image: "/images/photo_2025-12-03_02-56-41.jpg",
+    image: "/images/slate.jpg",
     github: "https://github.com/daniilsergeev/ecommerce",
     demo: "#"
   },
@@ -111,7 +111,7 @@ export const projects = [
     title: "Корпоративный портал",
     description: "Масштабируемое веб-решение для бизнеса с модульной архитектурой. Включает систему управления контентом и интеграцию с внешними сервисами.",
     technologies: ["React", "Node.js", "Express", "MongoDB"],
-    image: "/images/photo_2025-12-03_02-57-28.jpg",
+    image: "/images/nebula.jpg",
     github: "https://github.com/daniilsergeev/project3",
     demo: "#"
   },
@@ -120,7 +120,7 @@ export const projects = [
     title: "Персональное Портфолио",
     description: "Современный одностраничный сайт-портфолио с анимированным интерфейсом и адаптивным дизайном. Реализован с использованием React и современных веб-технологий для демонстрации профессиональных навыков и проектов.",
     technologies: ["React", "Tailwind CSS", "Framer Motion", "Responsive Design"],
-    image: "/images/photo_2025-12-03_02-57-50.jpg",
+    image: "/images/ripple.jpg",
     github: "https://github.com/daniilsergeev/portfolio",
     demo: "#"
   }
