@@ -20,6 +20,11 @@ import GraphicsElementsPage from "./pages/GraphicsElementsPage";
 import TypographyGuidePage from "./pages/TypographyGuidePage";
 
 const getRouterBasename = () => {
+  if (typeof window !== "undefined" && window.location.hostname.includes("github.io")) {
+    const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
+    return firstSegment ? `/${firstSegment}` : "/";
+  }
+
   const rawPublicUrl = process.env.PUBLIC_URL;
   if (rawPublicUrl && rawPublicUrl !== "." && rawPublicUrl !== "./") {
     return rawPublicUrl.replace(/\/$/, "");
