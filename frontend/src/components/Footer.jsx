@@ -102,58 +102,6 @@ const Footer = () => {
             в Санкт-Петербурге
           </p>
 
-          <button
-            onClick={() => {
-              if (window.location.pathname === '/ui-kit') {
-                return;
-              }
-              window.location.href = '/ui-kit';
-            }}
-            className="absolute bottom-2 left-0 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
-            title="UI-кит кнопок"
-          >
-            ui-кит
-          </button>
-
-          <button
-            onClick={() => {
-              if (window.location.pathname === '/style-guide') {
-                return;
-              }
-              window.location.href = '/style-guide';
-            }}
-            className="absolute bottom-2 left-14 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
-            title="Style Guide"
-          >
-            style
-          </button>
-
-          <button
-            onClick={() => {
-              if (window.location.pathname === '/graphics-elements') {
-                return;
-              }
-              window.location.href = '/graphics-elements';
-            }}
-            className="absolute bottom-2 left-28 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
-            title="Графические элементы"
-          >
-            графика
-          </button>
-
-          <button
-            onClick={() => {
-              if (window.location.pathname === '/typography-guide') {
-                return;
-              }
-              window.location.href = '/typography-guide';
-            }}
-            className="absolute bottom-2 left-[170px] px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
-            title="Шрифты"
-          >
-            шрифты
-          </button>
-          
           {/* Маленькая кнопка админки */}
           <button
             onClick={handleAdminClick}
