@@ -13,10 +13,17 @@ const ProjectCasePage = () => {
   const currentIndex = projectCases.findIndex((item) => item.slug === slug);
   const prevProject = currentIndex > 0 ? projectCases[currentIndex - 1] : null;
   const nextProject = currentIndex < projectCases.length - 1 ? projectCases[currentIndex + 1] : null;
+  const descriptionParts = (project?.description || '')
+    .split('. ')
+    .filter(Boolean)
+    .map((part) => (part.endsWith('.') ? part : `${part}.`));
+  const half = Math.ceil(descriptionParts.length / 2);
+  const leftDescription = descriptionParts.slice(0, half).join(' ');
+  const rightDescription = descriptionParts.slice(half).join(' ');
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, []);
+  }, [slug]);
 
   React.useEffect(() => {
     setSiteMessage('');
@@ -143,14 +150,15 @@ const ProjectCasePage = () => {
 
             <section className="mb-10 md:mb-14">
               <h2 className="text-2xl md:text-3xl font-semibold mb-4">Описание проекта</h2>
-              <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <p className="text-gray-300 leading-relaxed">{project.description}</p>
+              <div className="p-6 rounded-2xl bg-white/5 border border-white/10 grid md:grid-cols-2 gap-6">
+                <p className="text-gray-300 leading-relaxed">{leftDescription || project.description}</p>
+                <p className="text-gray-300 leading-relaxed">{rightDescription || ''}</p>
               </div>
             </section>
 
             <section>
               <h2 className="text-2xl md:text-3xl font-semibold mb-4">Галерея</h2>
-              <div className="grid sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {project.images.map((imageItem, index) => (
                   typeof imageItem === 'string' &&
                   (imageItem.startsWith('http') || imageItem.startsWith('/')) ? (
@@ -158,7 +166,11 @@ const ProjectCasePage = () => {
                       key={`${project.slug}-${index}`}
                       src={toAssetUrl(imageItem)}
                       alt={`${project.title} - экран ${index + 1}`}
-                      className="w-full h-auto rounded-2xl cursor-zoom-in"
+                      className={
+                        project.uniformGallery
+                          ? 'w-full aspect-[4/3] object-cover rounded-2xl cursor-zoom-in border border-white/10'
+                          : 'w-full h-auto rounded-2xl cursor-zoom-in'
+                      }
                       loading="lazy"
                       onClick={() => setSelectedImage(toAssetUrl(imageItem))}
                     />

@@ -11,13 +11,6 @@ const normalizeBaseUrl = (value) => {
   return trimmed.replace(/\/$/, '');
 };
 
-const isGithubPagesHost = () =>
-  typeof window !== 'undefined' && window.location.hostname.includes('github.io');
-
-const GOOGLE_API_URL = normalizeBaseUrl(process.env.REACT_APP_GOOGLE_API_URL);
-
-export const API_MODE = GOOGLE_API_URL ? 'google' : 'backend';
-
 export const getBackendUrl = () => {
   const fromEnv = normalizeBaseUrl(process.env.REACT_APP_BACKEND_URL);
   if (fromEnv) {
@@ -25,11 +18,6 @@ export const getBackendUrl = () => {
   }
 
   if (process.env.NODE_ENV === 'production') {
-    // On GitHub Pages there is no reverse proxy (/api), so an external backend URL is required.
-    if (isGithubPagesHost()) {
-      return null;
-    }
-
     // Docker/Nginx production: frontend and backend share host via /api proxy.
     return '';
   }
@@ -38,45 +26,11 @@ export const getBackendUrl = () => {
 };
 
 export const BACKEND_URL = getBackendUrl();
-export const isExternalBackendRequired = API_MODE === 'backend' && BACKEND_URL === null;
-export const isAdminApiAvailable = API_MODE === 'backend' && !isExternalBackendRequired;
+export const isExternalBackendRequired = false;
+export const isAdminApiAvailable = true;
 
 export const callPublicApi = async (path, options = {}) => {
   const { method = 'GET', body, signal } = options;
-
-  if (API_MODE === 'google') {
-    await fetch(GOOGLE_API_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      signal,
-      body: JSON.stringify({
-        action: path,
-        method,
-        payload: body || null
-      })
-    });
-
-    const googlePayload =
-      path === '/api/event-stats'
-        ? { success: true, events: [] }
-        : { success: true, message: 'Запрос отправлен' };
-
-    return {
-      ok: true,
-      status: 200,
-      headers: {
-        get: () => 'application/json'
-      },
-      json: async () => googlePayload
-    };
-  }
-
-  if (isExternalBackendRequired) {
-    return Promise.reject(
-      new Error('API не настроен для GitHub Pages. Укажите REACT_APP_GOOGLE_API_URL.')
-    );
-  }
 
   return fetch(`${BACKEND_URL}${path}`, {
     method,
@@ -89,9 +43,5 @@ export const callPublicApi = async (path, options = {}) => {
 };
 
 export const buildApiUrl = (path) => {
-  if (isExternalBackendRequired) {
-    return null;
-  }
-
   return `${BACKEND_URL}${path}`;
 };

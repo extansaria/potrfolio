@@ -60,14 +60,33 @@ export const projectCases = [
   {
     id: 4,
     slug: 'project-case-4',
-    title: 'Кейс проекта 04',
-    shortDescription: 'Промо-сайт с анимациями и адаптивной версткой.',
+    title: 'Boomshell - Лаундж бар',
+    shortDescription: 'Промо-сайт лаундж-бара: тёмная стилистика, меню и контакты, адаптивная вёрстка.',
     description:
-      'Демонстрационный контент-заглушка. Когда появятся реальные материалы, можно подставить фактический текст, изображения, ссылки и финальные результаты проекта.',
+      'Boomshell — лаундж-бар. Сайт в тёмной палитре с акцентами под вечерний формат: главный экран, блоки о заведении и меню, призыв связаться или забронировать. Вёрстка адаптивная для телефона и десктопа.',
     role: 'Frontend-разработчик',
-    stack: ['React', 'Three.js', 'CSS Animations', 'Docker'],
+    stack: ['HTML', 'CSS', 'JavaScript', 'Figma'],
     period: '2026',
-    images: ['Экран 1', 'Экран 2', 'Экран 3', 'Экран 4']
+    showSiteButton: true,
+    missingHost: true,
+    coverImage: '/case4/miks5.jpg',
+    uniformGallery: true,
+    images: ['/case4/miks1.png', '/case4/miks2.png', '/case4/miks3.png', '/case4/miks.png']
+  },
+  {
+    id: 5,
+    slug: 'project-case-5',
+    title: 'GOLDENCHEATS - реселлер приватных читов',
+    shortDescription: 'Промо-сайт сервиса GOLDENCHEATS с витриной продуктов и акцентом на доверие к бренду.',
+    description:
+      'GOLDENCHEATS - реселлер лучших приватных читов со всего мира для популярных игр. В кейсе показаны ключевые экраны с подачей продукта, преимуществами и удобной навигацией.',
+    role: 'Frontend-разработчик',
+    stack: ['HTML', 'CSS', 'JavaScript', 'Figma'],
+    period: '2026',
+    liveUrl: 'https://goldencheats.ru/',
+    coverImage: '/case5/wa1.jpg',
+    uniformGallery: true,
+    images: ['/case5/wa2.jpg', '/case5/wa3.jpg', '/case5/wa4.jpg', '/case5/wa5.jpg']
   }
 ];
 

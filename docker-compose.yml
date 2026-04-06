@@ -10,8 +10,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
     restart: unless-stopped
     networks:
       - portfolio-network
@@ -27,13 +25,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: portfolio-backend
-    ports:
-      - "3001:3001"
     env_file:
       - ./backend/.env
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://portfolio_user:portfolio_password@postgres:5432/portfolio_db
+      # CORS: localhost и *.cloudpub.ru разрешены в server.js; при необходимости добавьте домены в backend/.env → CORS_ORIGINS
     depends_on:
       postgres:
         condition: service_healthy
@@ -46,23 +43,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        REACT_APP_BACKEND_URL: ""
     container_name: portfolio-frontend
     ports:
       - "80:8080"
-    depends_on:
-      - backend
-    restart: unless-stopped
-    networks:
-      - portfolio-network
-
-  # Frontend React приложение - админ-панель
-  admin:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.admin
-    container_name: portfolio-admin
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
     restart: unless-stopped

@@ -1,41 +1,15 @@
 import React from 'react';
-import { Github, Linkedin, Send, Heart, Code, Settings } from 'lucide-react';
+import { Linkedin, Send, Heart, Code, Settings } from 'lucide-react';
 import { personalInfo, footerInfo } from '../data/mock';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const handleAdminClick = () => {
-    // Проверяем, находимся ли мы уже на админке
     if (window.location.pathname === '/admin') {
       return;
     }
-    
-    // Если текущий порт 3000, используем относительный путь
-    if (window.location.port === '3000') {
-      window.location.href = '/admin';
-      return;
-    }
-    
-    // Если мы на Cloud Pub - пытаемся определить поддомен админки
-    const hostname = window.location.hostname;
-    if (hostname.includes('cloudpub.ru')) {
-      // Если это основной сайт на Cloud Pub (без префикса или с другим префиксом)
-      // Пробуем открыть админку через новый поддомен Cloud Pub на порту 3000
-      // Но лучше использовать явный URL - для этого создай переменную окружения
-      const adminSubdomain = process.env.REACT_APP_ADMIN_URL || 'stockily-impish-krill.cloudpub.ru';
-      window.location.href = window.location.protocol + '//' + adminSubdomain + '/admin';
-      return;
-    }
-    
-    // Для локальной разработки - пробуем порт 3000
-    try {
-      const adminUrl = window.location.protocol + '//' + window.location.hostname + ':3000/admin';
-      window.location.href = adminUrl;
-    } catch (e) {
-      // Если не получилось, пробуем относительный путь
-      window.location.href = '/admin';
-    }
+    window.location.href = '/admin';
   };
 
   return (
@@ -77,14 +51,6 @@ const Footer = () => {
           <div>
             <h4 className="text-white font-semibold mb-4">Социальные сети</h4>
             <div className="flex gap-3">
-              <a 
-                href={personalInfo.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 hover:border-cyan-500/50 transition-all duration-300"
-              >
-                <Github size={20} />
-              </a>
               <a 
                 href={personalInfo.linkedin}
                 target="_blank"
@@ -135,6 +101,58 @@ const Footer = () => {
             <Heart size={14} className="text-red-400" fill="currentColor" />
             в Санкт-Петербурге
           </p>
+
+          <button
+            onClick={() => {
+              if (window.location.pathname === '/ui-kit') {
+                return;
+              }
+              window.location.href = '/ui-kit';
+            }}
+            className="absolute bottom-2 left-0 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
+            title="UI-кит кнопок"
+          >
+            ui-кит
+          </button>
+
+          <button
+            onClick={() => {
+              if (window.location.pathname === '/style-guide') {
+                return;
+              }
+              window.location.href = '/style-guide';
+            }}
+            className="absolute bottom-2 left-14 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
+            title="Style Guide"
+          >
+            style
+          </button>
+
+          <button
+            onClick={() => {
+              if (window.location.pathname === '/graphics-elements') {
+                return;
+              }
+              window.location.href = '/graphics-elements';
+            }}
+            className="absolute bottom-2 left-28 px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
+            title="Графические элементы"
+          >
+            графика
+          </button>
+
+          <button
+            onClick={() => {
+              if (window.location.pathname === '/typography-guide') {
+                return;
+              }
+              window.location.href = '/typography-guide';
+            }}
+            className="absolute bottom-2 left-[170px] px-2 py-1 text-[11px] text-gray-700 hover:text-gray-500 transition-colors opacity-20 hover:opacity-40"
+            title="Шрифты"
+          >
+            шрифты
+          </button>
           
           {/* Маленькая кнопка админки */}
           <button

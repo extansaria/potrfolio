@@ -1,23 +1,10 @@
-const getGithubPagesBase = () => {
-  if (typeof window === 'undefined') {
-    return '';
-  }
-
-  if (!window.location.hostname.includes('github.io')) {
-    return '';
-  }
-
-  const firstSegment = window.location.pathname.split('/').filter(Boolean)[0];
-  return firstSegment ? `/${firstSegment}` : '';
-};
-
 const getPublicBase = () => {
   const rawPublicUrl = process.env.PUBLIC_URL;
   if (rawPublicUrl && rawPublicUrl !== '.' && rawPublicUrl !== './') {
     return rawPublicUrl.replace(/\/$/, '');
   }
 
-  return getGithubPagesBase();
+  return '';
 };
 
 export const toAssetUrl = (assetPath) => {

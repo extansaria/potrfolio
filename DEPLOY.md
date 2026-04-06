@@ -1,28 +1,24 @@
-# Deploy: Free GitHub Pages + Google Apps Script
+# Deploy: Docker (single public port)
 
-## 1) Deploy free API
+This project runs in Docker with only one public port:
 
-1. Open [Google Apps Script](https://script.google.com/).
-2. Create a new project.
-3. Copy code from `google-apps-script/Code.gs`.
-4. Create a Google Sheet and bind this Apps Script project to it (or create script directly from the sheet).
-5. In Apps Script click `Deploy` -> `New deployment` -> type `Web app`.
-6. Execute as: `Me`.
-7. Who has access: `Anyone`.
-8. Deploy and copy the Web App URL (ends with `/exec`).
-9. If script is standalone (not bound to a sheet), it will auto-create a spreadsheet named `Portfolio Forms Data` on first request.
+- `http://localhost` -> frontend + admin route
+- backend and postgres are internal-only
 
-## 2) Configure frontend build on GitHub
+## Start
 
-Set repository secret in GitHub:
+```bash
+docker compose up --build -d
+```
 
-- `REACT_APP_GOOGLE_API_URL=https://script.google.com/macros/s/.../exec`
+## Stop
 
-Frontend workflow `.github/workflows/deploy-pages.yml` injects this secret at build time.
+```bash
+docker compose down
+```
 
-## 3) Result
+## Public Ports
 
-- Contact form works through Google Apps Script.
-- Event registration works through Google Apps Script.
-- Event stats are stored/read from Google Sheet.
-- Admin panel is intentionally disabled in this free mode on GitHub Pages.
+- `80:8080` (frontend container)
+
+No external mapping for backend or postgres.

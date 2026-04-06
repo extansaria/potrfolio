@@ -16,5 +16,5 @@
   <circle cx="190" cy="320" r="26" fill="#06B6D4" fill-opacity="0.35"/>
   <circle cx="190" cy="400" r="26" fill="#8B5CF6" fill-opacity="0.35"/>
   <circle cx="190" cy="480" r="26" fill="#EC4899" fill-opacity="0.35"/>
-  <text x="700" y="790" text-anchor="middle" fill="#E2E8F0" font-size="34" font-family="Arial, sans-serif">EduFlow - @>3@0<<0 :C@A0</text>
+  <text x="700" y="790" text-anchor="middle" fill="#E2E8F0" font-size="34" font-family="Arial, sans-serif">EduFlow - Program Layout</text>
 </svg>

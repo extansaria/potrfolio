@@ -7,7 +7,6 @@ export const personalInfo = {
   email: "danya_sergeev_2004@mail.ru",
   phone: "+7 (999) 123-45-67",
   telegram: "@extansaria",
-  github: "https://github.com/daniilsergeev",
   linkedin: "https://linkedin.com/in/daniilsergeev",
   about: "Увлечённый Frontend-разработчик с опытом создания современных веб-приложений. Специализируюсь на React, TypeScript и создании отзывчивых пользовательских интерфейсов. Стремлюсь к чистому коду и отличному пользовательскому опыту."
 };
@@ -94,7 +93,6 @@ export const projects = [
     description: "Профессиональная 3D визуализация с детальной проработкой материалов, освещения и композиции. Реалистичный рендеринг с использованием современных техник постобработки и оптимизации для достижения фотореалистичного результата.",
     technologies: ["3D Modeling", "Rendering", "Post-Processing", "Material Design"],
     image: "/images/matrix.jpg",
-    github: "https://github.com/daniilsergeev/3d-visualization",
     demo: "#"
   },
   {
@@ -103,7 +101,6 @@ export const projects = [
     description: "Полнофункциональный интернет-магазин с динамической корзиной покупок, системой управления товарами и безопасной обработкой платежей. Реализован с фокусом на удобство пользователя и оптимизацию конверсии.",
     technologies: ["React", "Redux", "Node.js", "MongoDB", "Payment API"],
     image: "/images/slate.jpg",
-    github: "https://github.com/daniilsergeev/ecommerce",
     demo: "#"
   },
   {
@@ -112,7 +109,6 @@ export const projects = [
     description: "Масштабируемое веб-решение для бизнеса с модульной архитектурой. Включает систему управления контентом и интеграцию с внешними сервисами.",
     technologies: ["React", "Node.js", "Express", "MongoDB"],
     image: "/images/nebula.jpg",
-    github: "https://github.com/daniilsergeev/project3",
     demo: "#"
   },
   {
@@ -121,7 +117,6 @@ export const projects = [
     description: "Современный одностраничный сайт-портфолио с анимированным интерфейсом и адаптивным дизайном. Реализован с использованием React и современных веб-технологий для демонстрации профессиональных навыков и проектов.",
     technologies: ["React", "Tailwind CSS", "Framer Motion", "Responsive Design"],
     image: "/images/ripple.jpg",
-    github: "https://github.com/daniilsergeev/portfolio",
     demo: "#"
   }
 ];

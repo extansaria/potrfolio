@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2, CheckCircle, AlertCircle, Mail, MessageSquare, User } from 'lucide-react';
 import { personalInfo } from '../data/mock';
-import { API_MODE, callPublicApi, isExternalBackendRequired } from '../utils/backendUrl';
+import { callPublicApi } from '../utils/backendUrl';
 const REQUEST_TIMEOUT_MS = 12000;
 
 const ContactSection = () => {
@@ -27,12 +27,6 @@ const ContactSection = () => {
     // Пока используем mock для демонстрации
     // Будет заменено на реальный API
     try {
-      if (isExternalBackendRequired) {
-        throw new Error(
-          'API для GitHub Pages не настроен. Укажите REACT_APP_GOOGLE_API_URL.'
-        );
-      }
-
       // Валидация
       if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
         throw new Error('Пожалуйста, заполните все поля');
@@ -56,11 +50,7 @@ const ContactSection = () => {
       if (!contentType || !contentType.includes('application/json')) {
         const text = await response.text();
         console.error('Backend вернул не JSON:', text.substring(0, 200));
-        throw new Error(
-          API_MODE === 'google'
-            ? 'Google API недоступен. Проверьте ссылку REACT_APP_GOOGLE_API_URL.'
-            : 'Сервер недоступен. Проверьте доступность backend API.'
-        );
+        throw new Error('Сервер недоступен. Проверьте доступность backend API.');
       }
 
       const data = await response.json();
@@ -98,7 +88,7 @@ const ContactSection = () => {
         {/* Заголовок секции */}
         <div className="text-center mb-16">
           <span className="text-cyan-400 text-sm font-mono mb-4 block">{''}</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Свяжитесь со мной</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Связь со мной</h2>
           <p className="text-gray-400 max-w-xl mx-auto">
             Если у вас есть вопросы или предложения, я всегда открыт для общения.
             Сообщение придёт мне напрямую в Telegram.

@@ -1,6 +1,9 @@
 import React from 'react';
-import { ArrowDown, Github, Linkedin, Send } from 'lucide-react';
+import { ArrowDown, Linkedin, Send } from 'lucide-react';
 import { personalInfo } from '../data/mock';
+
+const heroPitch =
+  'Создаю современные интерфейсы, которые помогают бизнесу получать заявки и продажи.\nБеру проект от идеи до запуска: дизайн, адаптив, анимации и стабильный продакшен.';
 
 const HeroSection = () => {
   const scrollToAbout = () => {
@@ -25,20 +28,12 @@ const HeroSection = () => {
           {personalInfo.title}
         </p>
 
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10 animate-fade-in-up animation-delay-200">
-          {personalInfo.about}
+        <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-10 animate-fade-in-up animation-delay-200 whitespace-pre-line">
+          {heroPitch}
         </p>
 
         {/* Социальные ссылки */}
         <div className="flex items-center justify-center gap-4 mb-12 animate-fade-in-up animation-delay-300">
-          <a 
-            href={personalInfo.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 rounded-full bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:bg-white/10 hover:border-cyan-500/50 transition-all duration-300"
-          >
-            <Github size={22} />
-          </a>
           <a 
             href={personalInfo.linkedin}
             target="_blank"

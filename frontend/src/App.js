@@ -14,11 +14,15 @@ import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
 import ProjectCasePage from "./pages/projects/ProjectCasePage";
+import UIKitPage from "./pages/UIKitPage";
+import StyleGuidePage from "./pages/StyleGuidePage";
+import GraphicsElementsPage from "./pages/GraphicsElementsPage";
+import TypographyGuidePage from "./pages/TypographyGuidePage";
 
 const getRouterBasename = () => {
-  if (window.location.hostname.includes("github.io")) {
-    const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
-    return firstSegment ? `/${firstSegment}` : "/";
+  const rawPublicUrl = process.env.PUBLIC_URL;
+  if (rawPublicUrl && rawPublicUrl !== "." && rawPublicUrl !== "./") {
+    return rawPublicUrl.replace(/\/$/, "");
   }
   return "/";
 };
@@ -78,6 +82,10 @@ function App() {
           <Route path="/" element={<PortfolioPage />} />
           <Route path="/projects/:slug" element={<ProjectCasePage />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/ui-kit" element={<UIKitPage />} />
+          <Route path="/style-guide" element={<StyleGuidePage />} />
+          <Route path="/graphics-elements" element={<GraphicsElementsPage />} />
+          <Route path="/typography-guide" element={<TypographyGuidePage />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -31,20 +31,36 @@ const allowedOrigins = (process.env.CORS_ORIGINS || '')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const isLocalOrCloudPubOrigin = (origin) => {
+  try {
+    const { hostname } = new URL(origin);
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') {
+      return true;
+    }
+    if (hostname === 'cloudpub.ru' || hostname.endsWith('.cloudpub.ru')) {
+      return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+};
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow non-browser requests and local tools (no Origin header).
       if (!origin) {
         callback(null, true);
         return;
       }
-
+      if (isLocalOrCloudPubOrigin(origin)) {
+        callback(null, true);
+        return;
+      }
       if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
-
       callback(new Error('CORS policy: origin is not allowed'));
     }
   })
@@ -55,16 +71,39 @@ app.use(express.json());
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}`;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const TELEGRAM_TIMEOUT_MS = parseInt(process.env.TELEGRAM_TIMEOUT_MS || '8000', 10);
+const TELEGRAM_MAX_RETRIES = parseInt(process.env.TELEGRAM_MAX_RETRIES || '3', 10);
 const telegramClient = axios.create({
   timeout: TELEGRAM_TIMEOUT_MS
 });
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const isRetryableTelegramError = (error) => {
+  const code = error?.code;
+  return ['EAI_AGAIN', 'ENOTFOUND', 'ECONNRESET', 'ECONNABORTED', 'ETIMEDOUT'].includes(code);
+};
+
 const sendTelegramMessage = async (text) => {
-  return telegramClient.post(`${TELEGRAM_API_URL}/sendMessage`, {
-    chat_id: CHAT_ID,
-    text,
-    parse_mode: 'HTML'
-  });
+  let lastError;
+
+  for (let attempt = 1; attempt <= TELEGRAM_MAX_RETRIES; attempt += 1) {
+    try {
+      return await telegramClient.post(`${TELEGRAM_API_URL}/sendMessage`, {
+        chat_id: CHAT_ID,
+        text,
+        parse_mode: 'HTML'
+      });
+    } catch (error) {
+      lastError = error;
+      if (!isRetryableTelegramError(error) || attempt === TELEGRAM_MAX_RETRIES) {
+        throw error;
+      }
+
+      // Short exponential backoff for transient DNS/network failures.
+      await sleep(250 * attempt);
+    }
+  }
+
+  throw lastError;
 };
 
 const initializeDatabase = async () => {
